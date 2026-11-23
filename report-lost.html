@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusFind | Report Lost Item</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #1e293b;
+            padding: 10px 16px;
+            border-radius: 7px;
+            text-decoration: none;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #dc2626;
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .notice {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-left: 5px solid #2563eb;
+            padding: 16px;
+            border-radius: 7px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin: 28px 0 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        input[readonly] {
+            background: #f1f5f9;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 7px;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .photo-box {
+            border: 2px dashed #94a3b8;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .photo-box input {
+            border: none;
+            padding: 10px 0;
+        }
+
+        #photoPreview {
+            display: none;
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px auto 0;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .submit-button:hover {
+            background: #b91c1c;
+        }
+
+        .submit-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 20px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            margin-top: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 22px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a href="dashboard.html" class="back-button">
+            ← Back to Dashboard
+        </a>
+
+        <h1>📢 Report a Lost Item</h1>
+
+        <p class="subtitle">
+            Lost something on campus? File a complaint with the details
+            below so college staff and students can help you find it.
+        </p>
+
+        <div class="notice">
+            <strong>Important:</strong>
+            This form is for reporting an item YOU LOST.
+            Provide an accurate description, date, and location.
+            Your report is a complaint about a missing item, not a
+            report about an item you found.
+        </div>
+
+        <form id="lostItemForm">
+
+            <h2>1. Lost Item Details</h2>
+
+            <div class="form-group">
+                <label for="itemName">
+                    Item Name <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="itemName"
+                    name="itemName"
+                    placeholder="e.g. College ID card, black wallet"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="category">
+                    Item Category <span class="required">*</span>
+                </label>
+
+                <select id="category" name="category" required>
+                    <option value="">Select category</option>
+                    <option value="ID Card">ID Card</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Books and Notes">Books and Notes</option>
+                    <option value="Wallet">Wallet</option>
+                    <option value="Keys">Keys</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Water Bottle">Water Bottle</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">
+                    Item Description <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe the item's colour, brand, appearance, and identifying features."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="dateLost">
+                    Date Lost <span class="required">*</span>
+                </label>
+
+                <input
+                    type="date"
+                    id="dateLost"
+                    name="dateLost"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="locationLost">
+                    Exact Location Where You Lost It
+                    <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="locationLost"
+                    name="locationLost"
+                    placeholder="e.g. First floor, outside Room 204, near the library."
+                    required
+                ></textarea>
+            </div>
+
+            <h2>2. Upload an Item Photo (Optional)</h2>
+
+            <div class="form-group">
+                <label for="itemPhoto">Item Photo</label>
+
+                <div class="photo-box">
+
+                    <p>
+                        📷 Upload a photo that helps identify your missing item.
+                    </p>
+
+                    <input
+                        type="file"
+                        id="itemPhoto"
+                        name="itemPhoto"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <span class="help-text">
+                        Accepted formats: JPG, PNG, and WebP.
+                        Maximum file size: 5 MB.
+                    </span>
+
+                    <img id="photoPreview" alt="Lost item photo preview">
+
+                </div>
+            </div>
+
+            <h2>3. Your Information</h2>
+
+            <div class="form-group">
+                <label for="studentName">
+                    Your Full Name <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="studentName"
+                    name="studentName"
+                    placeholder="Your registered name"
+                    readonly
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="registerNumber">
+                    Register Number <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="registerNumber"
+                    name="registerNumber"
+                    placeholder="Your register number"
+                    readonly
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="studentEmail">
+                    College Email <span class="required">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="studentEmail"
+                    name="studentEmail"
+                    placeholder="Your registered email"
+                    readonly
+                    required
+                >
+            </div>
+
+            <button type="submit" class="submit-button">
+                Submit Lost Item Complaint
+            </button>
+
+            <button type="reset" class="reset-button">
+                Clear Form
+            </button>
+
+        </form>
+
+        <div id="successMessage" class="success-message" role="status"></div>
+
+        <footer>
+            CampusFind © 2026 | College Lost and Found Management System
+        </footer>
+
+    </main>
+
+    <script>
+
+        // =========================================
+        // CHECK LOGGED-IN STUDENT
+        // =========================================
+
+        let student;
+
+        try {
+
+            const savedStudent =
+                sessionStorage.getItem("campusFindStudent");
+
+            if (!savedStudent) {
+                throw new Error("No logged-in student found.");
+            }
+
+            student = JSON.parse(savedStudent);
+
+            if (!student || !student.student_id) {
+                throw new Error("Student information is incomplete.");
+            }
+
+        } catch (error) {
+
+            alert("Please log in again to report a lost item.");
+
+            window.location.replace("student.html");
+
+            throw error;
+
+        }
+
+
+        // =========================================
+        // FORM ELEMENTS
+        // =========================================
+
+        const form = document.getElementById("lostItemForm");
+
+        const photoInput = document.getElementById("itemPhoto");
+
+        const photoPreview = document.getElementById("photoPreview");
+
+        const dateLostInput = document.getElementById("dateLost");
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+
+        // =========================================
+        // AUTOMATICALLY FILL STUDENT DETAILS
+        // =========================================
+
+        document.getElementById("studentName").value =
+            student.name || "";
+
+        document.getElementById("registerNumber").value =
+            student.register_number || "";
+
+        document.getElementById("studentEmail").value =
+            student.email || "";
+
+
+        // =========================================
+        // SET TODAY AS MAXIMUM LOST DATE
+        // =========================================
+
+        const today = new Date();
+
+        const todayString = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+        ].join("-");
+
+        dateLostInput.max = todayString;
+
+
+        // =========================================
+        // PHOTO PREVIEW
+        // =========================================
+
+        photoInput.addEventListener("change", function () {
+
+            const file = this.files[0];
+
+            photoPreview.style.display = "none";
+
+            photoPreview.removeAttribute("src");
+
+            if (!file) {
+                return;
+            }
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert("Please select a JPG, PNG, or WebP image.");
+
+                this.value = "";
+
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+
+                alert("The image must be smaller than 5 MB.");
+
+                this.value = "";
+
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                photoPreview.src = event.target.result;
+
+                photoPreview.style.display = "block";
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+
+
+        // =========================================
+        // SUBMIT LOST ITEM TO JAVA AND MYSQL
+        // =========================================
+
+        form.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            if (!form.reportValidity()) {
+                return;
+            }
+
+            if (dateLostInput.value > todayString) {
+
+                alert("Date Lost cannot be in the future.");
+
+                return;
+            }
+
+            const file = photoInput.files[0];
+
+            if (file) {
+
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+                ];
+
+                if (!allowedTypes.includes(file.type)) {
+
+                    alert("Please select a JPG, PNG, or WebP image.");
+
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+
+                    alert("The image must be smaller than 5 MB.");
+
+                    return;
+                }
+
+            }
+
+
+            const submitButton =
+                form.querySelector(".submit-button");
+
+            const originalText = submitButton.textContent;
+
+            submitButton.disabled = true;
+
+            submitButton.textContent = "Submitting...";
+
+
+            // =====================================
+            // GET ACTUAL LOGGED-IN STUDENT ID
+            // =====================================
+
+            const payload = {
+
+                title: document.getElementById("itemName")
+                    .value.trim(),
+
+                description: document.getElementById("description")
+                    .value.trim(),
+
+                category: document.getElementById("category")
+                    .value,
+
+                location: document.getElementById("locationLost")
+                    .value.trim(),
+
+                item_type: "LOST",
+
+                reported_by: String(student.student_id)
+
+            };
+
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:8080/api/items",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(payload)
+                    }
+                );
+
+
+                const result = await response.json().catch(() => ({}));
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        "HTTP Error: " + response.status
+                    );
+
+                }
+
+
+                // =================================
+                // DISPLAY SUCCESS MESSAGE
+                // =================================
+
+                successMessage.innerHTML = "";
+
+                const heading = document.createElement("strong");
+
+                heading.textContent =
+                    "Lost-item complaint successfully saved to MySQL!";
+
+
+                const referenceText = document.createElement("p");
+
+                const itemId =
+                    result.item_id ?? result.itemId ?? result.id;
+
+                referenceText.textContent =
+                    itemId !== undefined
+                        ? "Database Item ID: " + itemId
+                        : (result.message || "Item saved successfully.");
+
+
+                const studentText = document.createElement("p");
+
+                studentText.textContent =
+                    "Reported by: " + student.name +
+                    " (Student ID: " + student.student_id + ")";
+
+
+                const note = document.createElement("p");
+
+                note.textContent =
+                    "Your lost-item details have been sent to Java and stored " +
+                    "in MySQL. The photo is currently only previewed in this " +
+                    "browser. The selected lost date is not yet stored by " +
+                    "the current API.";
+
+
+                successMessage.appendChild(heading);
+
+                successMessage.appendChild(referenceText);
+
+                successMessage.appendChild(studentText);
+
+                successMessage.appendChild(note);
+
+
+                successMessage.style.display = "block";
+
+
+                successMessage.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+
+                // Reset item details but retain student information.
+                form.reset();
+
+                document.getElementById("studentName").value =
+                    student.name || "";
+
+                document.getElementById("registerNumber").value =
+                    student.register_number || "";
+
+                document.getElementById("studentEmail").value =
+                    student.email || "";
+
+            } catch (error) {
+
+                console.error("Unable to save lost item:", error);
+
+                alert(
+                    "Unable to save the lost item. Check that your Java " +
+                    "server is running. Details: " + error.message
+                );
+
+            } finally {
+
+                submitButton.disabled = false;
+
+                submitButton.textContent = originalText;
+
+            }
+
+        });
+
+
+        // =========================================
+        // RESET FORM
+        // =========================================
+
+        form.addEventListener("reset", function () {
+
+            setTimeout(function () {
+
+                photoPreview.style.display = "none";
+
+                photoPreview.removeAttribute("src");
+
+                successMessage.style.display = "none";
+
+                successMessage.innerHTML = "";
+
+                // Restore logged-in student information.
+                document.getElementById("studentName").value =
+                    student.name || "";
+
+                document.getElementById("registerNumber").value =
+                    student.register_number || "";
+
+                document.getElementById("studentEmail").value =
+                    student.email || "";
+
+            }, 0);
+
+        });
+
+    </script>
+
+</body>
+</html>

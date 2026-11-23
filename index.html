@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusFind | College Lost & Found</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4fa;
+            color: #172554;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 38px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 17px;
+            margin-bottom: 40px;
+        }
+
+        .welcome {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 18px;
+            width: 300px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 18px;
+        }
+
+        .card h2 {
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 45px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            margin-top: 22px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background: #2563eb;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .staff-button {
+            background: #172554;
+        }
+
+        .staff-button:hover {
+            background: #0f172a;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 650px) {
+            .welcome {
+                font-size: 26px;
+            }
+
+            .logo {
+                font-size: 32px;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="logo">CampusFind</div>
+
+        <p class="subtitle">
+            College Lost & Found Management System
+        </p>
+
+        <h1 class="welcome">Welcome to CampusFind</h1>
+
+        <p class="description">
+            Lost something on campus? Let's help you find it.
+            <br>
+            Choose how you want to continue.
+        </p>
+
+        <div class="options">
+
+            <div class="card">
+
+                <div class="icon">🎓</div>
+
+                <h2>I'm a Student</h2>
+
+                <p>
+                    Search for lost belongings, report found items,
+                    and claim items that belong to you.
+                </p>
+
+                <button onclick="selectStudent()">
+                    Continue as Student
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <div class="icon">🛡️</div>
+
+                <h2>College Staff</h2>
+
+                <p>
+                    Access the official dashboard to review claims,
+                    verify ownership, and manage item handovers.
+                </p>
+
+                <button class="staff-button" onclick="selectStaff()">
+                    Continue as Staff
+                </button>
+
+            </div>
+
+        </div>
+
+        <p class="footer">
+            CampusFind © 2026 | Helping lost belongings find their way home
+        </p>
+
+    </div>
+
+    <script>
+       function selectStudent() {
+    window.location.href = "student.html";
+}
+
+       function selectStaff() {
+    window.location.href = "staff.html";
+}
+    </script>
+
+</body>
+</html>

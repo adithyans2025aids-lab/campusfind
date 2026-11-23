@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusFind | Student Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fc;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            margin-top: 6px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .logout-button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background: #dc2626;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .student-info {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 15px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 7px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .notice {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 17px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            line-height: 1.7;
+            color: #1e40af;
+        }
+
+        .section-title {
+            margin-bottom: 22px;
+            font-size: 24px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.09);
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-bottom: 17px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 95px;
+            margin-bottom: 20px;
+        }
+
+        .card button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            filter: brightness(0.9);
+        }
+
+        .lost-button {
+            background: #dc2626 !important;
+        }
+
+        .found-button {
+            background: #059669 !important;
+        }
+
+        .claims-button {
+            background: #7c3aed !important;
+        }
+
+        .notification-button {
+            background: #d97706 !important;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 45px;
+            background: #172554;
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome h2 {
+                font-size: 25px;
+            }
+
+            .card p {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>🎓 CampusFind</h1>
+            <p>College Lost and Found Management System</p>
+        </div>
+
+        <button class="logout-button" onclick="logout()">
+            Logout
+        </button>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome">
+
+            <h2 id="welcomeHeading">
+                Welcome to Your Dashboard 👋
+            </h2>
+
+            <p>
+                Manage lost belongings, report found items, and track
+                your claims through the CampusFind student portal.
+            </p>
+
+            <div class="student-info">
+
+                <div>
+                    <strong>Student ID:</strong>
+                    <span id="studentId">Loading...</span>
+                </div>
+
+                <div>
+                    <strong>Register Number:</strong>
+                    <span id="registerNumber">Loading...</span>
+                </div>
+
+                <div>
+                    <strong>Email:</strong>
+                    <span id="studentEmail">Loading...</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="notice">
+            <strong>📢 How CampusFind works:</strong>
+            Lost something? Submit a lost-item complaint.
+            Found something? Upload its details and photo.
+            Students can search reported found items and submit ownership
+            claims. College staff will review claims and coordinate returns.
+        </div>
+
+        <h2 class="section-title">What would you like to do?</h2>
+
+        <section class="dashboard-grid">
+
+            <!-- SEARCH ITEMS -->
+            <div class="card">
+                <div class="icon">🔍</div>
+
+                <h3>Search Items</h3>
+
+                <p>
+                    Browse found-item listings, view item descriptions
+                    and photos, and submit a claim if an item belongs to you.
+                </p>
+
+                <button onclick="openPage('search-items.html')">
+                    Search Found Items
+                </button>
+            </div>
+
+            <!-- REPORT LOST ITEM -->
+            <div class="card">
+                <div class="icon">📢</div>
+
+                <h3>Report Lost Item</h3>
+
+                <p>
+                    File a complaint about an item you lost on campus.
+                    Enter its description, date, location, and your
+                    contact information.
+                </p>
+
+                <button class="lost-button"
+                        onclick="openPage('report-lost.html')">
+                    Report Lost Item
+                </button>
+            </div>
+
+            <!-- REPORT FOUND ITEM -->
+            <div class="card">
+                <div class="icon">🎒</div>
+
+                <h3>Report Found Item</h3>
+
+                <p>
+                    Found an item belonging to someone else?
+                    Upload its photo and details so the rightful owner
+                    can identify and claim it.
+                </p>
+
+                <button class="found-button"
+                        onclick="openPage('report-found.html')">
+                    Report Found Item
+                </button>
+            </div>
+
+            <!-- MY CLAIMS -->
+            <div class="card">
+                <div class="icon">📋</div>
+
+                <h3>My Claims</h3>
+
+                <p>
+                    Review the claims you submitted and check their
+                    status, including pending, approved, rejected,
+                    and returned items.
+                </p>
+
+                <button class="claims-button"
+                        onclick="openPage('my-claims.html')">
+                    View My Claims
+                </button>
+            </div>
+
+            <!-- NOTIFICATIONS -->
+            <div class="card">
+                <div class="icon">🔔</div>
+
+                <h3>Notifications</h3>
+
+                <p>
+                    Check for updates about claim decisions,
+                    staff responses, and item handover confirmations.
+                </p>
+
+                <button class="notification-button"
+                        onclick="openPage('notifications.html')">
+                    View Notifications
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>CampusFind © 2026 | College Lost and Found Management System</p>
+        <p>Helping lost belongings find their rightful owners.</p>
+    </footer>
+
+    <script>
+
+        // =====================================
+        // CHECK LOGGED-IN STUDENT
+        // =====================================
+
+        const studentData =
+            sessionStorage.getItem("campusFindStudent");
+
+        if (!studentData) {
+
+            alert("Please log in to access your dashboard.");
+
+            window.location.replace("student.html");
+
+        }
+
+        let student = null;
+
+        try {
+
+            student = JSON.parse(studentData);
+
+        } catch (error) {
+
+            sessionStorage.removeItem("campusFindStudent");
+
+            alert("Session error. Please log in again.");
+
+            window.location.replace("student.html");
+
+        }
+
+
+        // =====================================
+        // DISPLAY STUDENT INFORMATION
+        // =====================================
+
+        if (student) {
+
+            if (!student.student_id) {
+
+                alert("Student ID is missing. Please log in again.");
+
+                sessionStorage.removeItem("campusFindStudent");
+
+                window.location.replace("student.html");
+
+            } else {
+
+                document.getElementById("welcomeHeading").textContent =
+                    "Welcome, " + student.name + " 👋";
+
+                document.getElementById("studentId").textContent =
+                    student.student_id;
+
+                document.getElementById("registerNumber").textContent =
+                    student.register_number || "Not available";
+
+                document.getElementById("studentEmail").textContent =
+                    student.email || "Not available";
+
+            }
+
+        }
+
+
+        // =====================================
+        // NAVIGATION
+        // =====================================
+
+        function openPage(page) {
+
+            window.location.href = page;
+
+        }
+
+
+        // =====================================
+        // LOGOUT
+        // =====================================
+
+        function logout() {
+
+            const confirmed = confirm(
+                "Are you sure you want to log out?"
+            );
+
+            if (confirmed) {
+
+                sessionStorage.removeItem("campusFindStudent");
+
+                window.location.replace("index.html");
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>

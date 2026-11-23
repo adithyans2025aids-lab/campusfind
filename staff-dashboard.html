@@ -1,0 +1,999 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusFind | Staff Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            font-size: 27px;
+        }
+
+        header p {
+            color: #cbd5e1;
+            margin-top: 7px;
+            font-size: 14px;
+        }
+
+        .logout-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .notice {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left: 5px solid #2563eb;
+            padding: 17px;
+            border-radius: 7px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .summary-card p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .summary-card h3 {
+            font-size: 30px;
+        }
+
+        .blue {
+            color: #2563eb;
+        }
+
+        .orange {
+            color: #d97706;
+        }
+
+        .green {
+            color: #059669;
+        }
+
+        .purple {
+            color: #7c3aed;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .section-header h2 {
+            font-size: 23px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .filters input {
+            min-width: 220px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .returned {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .available {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .unavailable {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .action-button {
+            display: block;
+            width: 100%;
+            border: none;
+            padding: 9px 12px;
+            border-radius: 6px;
+            margin-bottom: 7px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .approve-button {
+            background: #059669;
+        }
+
+        .reject-button {
+            background: #dc2626;
+        }
+
+        .handover-button {
+            background: #2563eb;
+        }
+
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 35px;
+            color: #64748b;
+        }
+
+        .item-photo {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 7px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background: #172554;
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 900px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 16px;
+            }
+
+            .welcome h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>🎓 CampusFind</h1>
+        <p>College Staff Administration Portal</p>
+    </div>
+
+    <button class="logout-button" onclick="logout()">
+        Logout
+    </button>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h2>Staff Dashboard 👨‍💼</h2>
+
+        <p>
+            Manage found items, review ownership claims, and record
+            item handovers after verifying the claimant's identity.
+        </p>
+    </section>
+
+    <div class="notice">
+        <strong>Database Connected:</strong>
+        This dashboard retrieves items and claims from the MySQL
+        database through the Java backend. Staff authentication
+        must be implemented before real-world use.
+    </div>
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="summary-grid">
+
+        <div class="summary-card">
+            <p>Total Found Items</p>
+            <h3 class="blue" id="totalItems">0</h3>
+        </div>
+
+        <div class="summary-card">
+            <p>Available Items</p>
+            <h3 class="green" id="availableItems">0</h3>
+        </div>
+
+        <div class="summary-card">
+            <p>Pending Claims</p>
+            <h3 class="orange" id="pendingClaims">0</h3>
+        </div>
+
+        <div class="summary-card">
+            <p>Returned Items</p>
+            <h3 class="purple" id="returnedItems">0</h3>
+        </div>
+
+    </section>
+
+    <!-- FOUND ITEMS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>📦 Reported Found Items</h2>
+
+            <div class="filters">
+
+                <input
+                    type="search"
+                    id="itemSearch"
+                    placeholder="Search item or location..."
+                >
+
+                <select id="itemStatusFilter">
+                    <option value="ALL">All Items</option>
+                    <option value="AVAILABLE">Available</option>
+                    <option value="RETURNED">Returned</option>
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Location Found</th>
+                        <th>Date Found</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="itemsTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- OWNERSHIP CLAIMS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>📋 Ownership Claims</h2>
+
+            <div class="filters">
+
+                <select id="claimStatusFilter">
+                    <option value="ALL">All Claims</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="RETURNED">Returned</option>
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Claim Reference</th>
+                        <th>Item</th>
+                        <th>Claimant</th>
+                        <th>Contact</th>
+                        <th>Ownership Details</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="claimsTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+    <p>CampusFind © 2026 | College Lost and Found Management System</p>
+    <p>Staff administration portal</p>
+</footer>
+
+<script>
+
+    // JAVA BACKEND URL
+
+    const API = "http://localhost:8080/api";
+
+    // DATABASE DATA
+
+    let allItems = [];
+    let allClaims = [];
+
+    // CREATE TABLE CELL
+
+    function createCell(text) {
+
+        const td = document.createElement("td");
+
+        td.textContent = text || "Not provided";
+
+        return td;
+    }
+
+    // CREATE STATUS BADGE
+
+    function createStatus(status) {
+
+        const span = document.createElement("span");
+
+        span.className =
+            "status " + (status || "PENDING").toLowerCase();
+
+        span.textContent = status || "PENDING";
+
+        return span;
+    }
+
+    // EXTRACT CLAIMANT DETAILS
+
+    function extractDetail(description, label) {
+
+        const lines = (description || "").split("\n");
+
+        const line = lines.find(value =>
+            value.toLowerCase().startsWith(label.toLowerCase())
+        );
+
+        return line
+            ? line.substring(label.length).trim()
+            : "Not provided";
+    }
+
+    // LOAD ITEMS AND CLAIMS FROM MYSQL
+
+    async function loadDashboard() {
+
+        try {
+
+            const [itemsResponse, claimsResponse] =
+                await Promise.all([
+
+                    fetch(API + "/items"),
+
+                    fetch(API + "/claims")
+
+                ]);
+
+            if (!itemsResponse.ok || !claimsResponse.ok) {
+
+                throw new Error(
+                    "Unable to retrieve database data."
+                );
+            }
+
+            const items = await itemsResponse.json();
+
+            const claims = await claimsResponse.json();
+
+            // Only found items
+
+            allItems = items.filter(item =>
+                item.item_type === "FOUND"
+            );
+
+            allClaims = claims;
+
+            refreshDashboard();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to load dashboard data. " +
+                "Check whether the Java server is running."
+            );
+        }
+    }
+
+    // UPDATE SUMMARY CARDS
+
+    function updateSummary() {
+
+        document.getElementById("totalItems").textContent =
+            allItems.length;
+
+        document.getElementById("availableItems").textContent =
+            allItems.filter(item =>
+                item.status === "AVAILABLE"
+            ).length;
+
+        document.getElementById("pendingClaims").textContent =
+            allClaims.filter(claim =>
+                claim.claim_status === "PENDING"
+            ).length;
+
+        document.getElementById("returnedItems").textContent =
+            allItems.filter(item =>
+                item.status === "RETURNED"
+            ).length;
+    }
+
+    // DISPLAY FOUND ITEMS
+
+    function renderItems() {
+
+        const body =
+            document.getElementById("itemsTableBody");
+
+        const search =
+            document.getElementById("itemSearch")
+                .value.trim().toLowerCase();
+
+        const filter =
+            document.getElementById("itemStatusFilter").value;
+
+        body.innerHTML = "";
+
+        const filtered = allItems.filter(item => {
+
+            const searchable =
+                (item.title || "") + " " +
+                (item.location || "") + " " +
+                (item.category || "");
+
+            return searchable.toLowerCase().includes(search) &&
+                (filter === "ALL" || item.status === filter);
+        });
+
+        if (filtered.length === 0) {
+
+            const row = document.createElement("tr");
+
+            const cell = createCell(
+                "No found items to display."
+            );
+
+            cell.colSpan = 6;
+            cell.className = "empty-row";
+
+            row.appendChild(cell);
+
+            body.appendChild(row);
+
+            return;
+        }
+
+        filtered.forEach(item => {
+
+            const row = document.createElement("tr");
+
+            // Photo
+
+            const photoCell = document.createElement("td");
+
+            photoCell.textContent = "No photo";
+
+            row.appendChild(photoCell);
+
+            // Item details
+
+            row.appendChild(createCell(item.title));
+
+            row.appendChild(createCell(item.category));
+
+            row.appendChild(createCell(item.location));
+
+            row.appendChild(createCell(item.report_date));
+
+            // Status
+
+            const statusCell = document.createElement("td");
+
+            statusCell.appendChild(
+                createStatus(item.status)
+            );
+
+            row.appendChild(statusCell);
+
+            body.appendChild(row);
+        });
+    }
+
+    // DISPLAY CLAIMS
+
+    function renderClaims() {
+
+        const body =
+            document.getElementById("claimsTableBody");
+
+        const filter =
+            document.getElementById("claimStatusFilter").value;
+
+        body.innerHTML = "";
+
+        const filtered = allClaims.filter(claim =>
+            filter === "ALL" ||
+            claim.claim_status === filter
+        );
+
+        if (filtered.length === 0) {
+
+            const row = document.createElement("tr");
+
+            const cell = createCell(
+                "No claims to display."
+            );
+
+            cell.colSpan = 7;
+            cell.className = "empty-row";
+
+            row.appendChild(cell);
+
+            body.appendChild(row);
+
+            return;
+        }
+
+        filtered.forEach(claim => {
+
+            const row = document.createElement("tr");
+
+            const description =
+                claim.claim_description || "";
+
+            const claimantName = extractDetail(
+                description,
+                "Claimant Name:"
+            );
+
+            const claimantEmail = extractDetail(
+                description,
+                "Email:"
+            );
+
+            const ownershipProof = extractDetail(
+                description,
+                "Ownership Proof:"
+            );
+
+            // Claim reference
+
+            row.appendChild(
+                createCell(claim.claim_id)
+            );
+
+            // Item name
+
+            row.appendChild(
+                createCell(claim.item_title)
+            );
+
+            // Claimant
+
+            row.appendChild(
+                createCell(claimantName)
+            );
+
+            // Contact
+
+            row.appendChild(
+                createCell(claimantEmail)
+            );
+
+            // Ownership proof
+
+            row.appendChild(
+                createCell(ownershipProof)
+            );
+
+            // Status
+
+            const statusCell = document.createElement("td");
+
+            statusCell.appendChild(
+                createStatus(claim.claim_status)
+            );
+
+            row.appendChild(statusCell);
+
+            // ACTION BUTTONS
+
+            const actionsCell =
+                document.createElement("td");
+
+            // APPROVE BUTTON
+
+            const approve =
+                document.createElement("button");
+
+            approve.className =
+                "action-button approve-button";
+
+            approve.textContent = "Approve";
+
+            approve.disabled =
+                claim.claim_status !== "PENDING";
+
+            approve.onclick = () =>
+                updateClaimStatus(
+                    claim.claim_id,
+                    "APPROVED"
+                );
+
+            actionsCell.appendChild(approve);
+
+            // REJECT BUTTON
+
+            const reject =
+                document.createElement("button");
+
+            reject.className =
+                "action-button reject-button";
+
+            reject.textContent = "Reject";
+
+            reject.disabled =
+                claim.claim_status !== "PENDING";
+
+            reject.onclick = () =>
+                updateClaimStatus(
+                    claim.claim_id,
+                    "REJECTED"
+                );
+
+            actionsCell.appendChild(reject);
+
+            // HANDOVER BUTTON
+
+            const handover =
+                document.createElement("button");
+
+            handover.className =
+                "action-button handover-button";
+
+            handover.textContent = "Confirm Handover";
+
+            handover.disabled =
+                claim.claim_status !== "APPROVED";
+
+            handover.onclick = () =>
+                confirmHandover(claim.claim_id);
+
+            actionsCell.appendChild(handover);
+
+            row.appendChild(actionsCell);
+
+            body.appendChild(row);
+        });
+    }
+
+    // APPROVE OR REJECT CLAIM
+
+    async function updateClaimStatus(claimId, newStatus) {
+
+        const message = newStatus === "APPROVED"
+            ? "Approve this ownership claim?"
+            : "Reject this ownership claim?";
+
+        if (!confirm(message)) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                API + "/claims/status",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        claim_id: claimId,
+
+                        status: newStatus
+
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.error || "Claim update failed."
+                );
+            }
+
+            alert(
+                "Claim " + newStatus + " successfully!"
+            );
+
+            await loadDashboard();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+        }
+    }
+
+    // CONFIRM ITEM HANDOVER
+
+    async function confirmHandover(claimId) {
+
+        const verified = confirm(
+
+            "Have you verified the claimant's identity " +
+            "and physically handed over the item?"
+
+        );
+
+        if (!verified) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                API + "/claims/handover",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        claim_id: claimId
+
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.error || "Handover failed."
+                );
+            }
+
+            alert(
+                "Handover confirmed! " +
+                "Item marked as RETURNED."
+            );
+
+            await loadDashboard();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+        }
+    }
+
+    // REFRESH DASHBOARD
+
+    function refreshDashboard() {
+
+        updateSummary();
+
+        renderItems();
+
+        renderClaims();
+    }
+
+    // LOGOUT
+
+    function logout() {
+
+        if (confirm("Return to the staff login page?")) {
+
+            window.location.href = "staff.html";
+        }
+    }
+
+    // SEARCH EVENTS
+
+    document.getElementById("itemSearch")
+        .addEventListener("input", renderItems);
+
+    // ITEM FILTER
+
+    document.getElementById("itemStatusFilter")
+        .addEventListener("change", renderItems);
+
+    // CLAIM FILTER
+
+    document.getElementById("claimStatusFilter")
+        .addEventListener("change", renderClaims);
+
+    // RELOAD WHEN RETURNING TO PAGE
+
+    window.addEventListener("focus", loadDashboard);
+
+    // LOAD DATABASE DATA
+
+    loadDashboard();
+
+</script>
+
+</body>
+</html>
+

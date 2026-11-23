@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFind | My Claims</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px 7%;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            color: #cbd5e1;
+            margin-top: 7px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #1e293b;
+            padding: 11px 17px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-card p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .summary-card h2 {
+            font-size: 30px;
+        }
+
+        .total h2 {
+            color: #2563eb;
+        }
+
+        .pending h2 {
+            color: #d97706;
+        }
+
+        .approved h2 {
+            color: #059669;
+        }
+
+        .returned h2 {
+            color: #7c3aed;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        .table-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .table-heading h2 {
+            font-size: 22px;
+        }
+
+        select {
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 15px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-returned {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .search-button {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 7px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .search-button:hover {
+            background: #1d4ed8;
+        }
+
+        .claim-id {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .proof-details {
+            max-width: 220px;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        .message {
+            padding: 14px;
+            margin-bottom: 18px;
+            border-radius: 7px;
+            display: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        footer {
+            background: #172554;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 25px;
+            margin-top: 45px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 850px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🎓 CampusFind</h1>
+        <p>College Lost and Found Management System</p>
+    </header>
+
+    <main class="container">
+
+        <a href="dashboard.html" class="back-button">
+            ← Back to Dashboard
+        </a>
+
+        <h1 class="page-title">📋 My Claims</h1>
+
+        <p class="subtitle">
+            View the ownership claims you have submitted and check
+            their current status.
+        </p>
+
+        <div id="errorMessage" class="message error-message"></div>
+
+        <section class="summary-grid">
+
+            <div class="summary-card total">
+                <p>Total Claims</p>
+                <h2 id="totalCount">0</h2>
+            </div>
+
+            <div class="summary-card pending">
+                <p>Pending Review</p>
+                <h2 id="pendingCount">0</h2>
+            </div>
+
+            <div class="summary-card approved">
+                <p>Approved</p>
+                <h2 id="approvedCount">0</h2>
+            </div>
+
+            <div class="summary-card returned">
+                <p>Items Returned</p>
+                <h2 id="returnedCount">0</h2>
+            </div>
+
+        </section>
+
+        <section class="table-container">
+
+            <div class="table-heading">
+
+                <h2>My Submitted Claims</h2>
+
+                <select id="statusFilter">
+                    <option value="ALL">All Claims</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="RETURNED">Returned</option>
+                </select>
+
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Claim Reference</th>
+                        <th>Item Name</th>
+                        <th>Submitted On</th>
+                        <th>Ownership Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="claimsTableBody"></tbody>
+
+            </table>
+
+            <div id="emptyState" class="empty-state" style="display:none;">
+
+                <div class="icon">📭</div>
+
+                <h3 id="emptyTitle">No Claims Found</h3>
+
+                <p id="emptyMessage">
+                    You haven't submitted any claims yet.
+                </p>
+
+                <a href="search-items.html" class="search-button">
+                    Search Found Items
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>CampusFind © 2026 | College Lost and Found Management System</p>
+    </footer>
+
+    <script>
+
+        // =====================================
+        // 1. CHECK STUDENT LOGIN
+        // =====================================
+
+        let student = null;
+
+        try {
+
+            const savedStudent =
+                sessionStorage.getItem("campusFindStudent");
+
+            if (savedStudent) {
+                student = JSON.parse(savedStudent);
+            }
+
+        } catch (error) {
+
+            console.error("Student session error:", error);
+
+        }
+
+        if (!student || !student.student_id) {
+
+            sessionStorage.removeItem("campusFindStudent");
+
+            alert("Please login first.");
+
+            window.location.replace("student.html");
+
+        } else {
+
+            initializePage();
+
+        }
+
+
+        // =====================================
+        // 2. INITIALIZE PAGE
+        // =====================================
+
+        function initializePage() {
+
+            const API_URL = "http://localhost:8080/api";
+
+            const tableBody =
+                document.getElementById("claimsTableBody");
+
+            const statusFilter =
+                document.getElementById("statusFilter");
+
+            const emptyState =
+                document.getElementById("emptyState");
+
+            const errorMessage =
+                document.getElementById("errorMessage");
+
+            let allClaims = [];
+
+
+            // =====================================
+            // 3. FORMAT DATE
+            // =====================================
+
+            function formatDate(dateString) {
+
+                if (!dateString) {
+                    return "Not available";
+                }
+
+                const date = new Date(
+                    String(dateString).replace(" ", "T")
+                );
+
+                if (Number.isNaN(date.getTime())) {
+                    return "Not available";
+                }
+
+                return date.toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+
+            }
+
+
+            // =====================================
+            // 4. CREATE TABLE CELL
+            // =====================================
+
+            function createCell(text, className) {
+
+                const cell = document.createElement("td");
+
+                cell.textContent = text || "Not provided";
+
+                if (className) {
+                    cell.className = className;
+                }
+
+                return cell;
+
+            }
+
+
+            // =====================================
+            // 5. STATUS CLASS
+            // =====================================
+
+            function getStatusClass(status) {
+
+                switch (String(status).toUpperCase()) {
+
+                    case "APPROVED":
+                        return "status-approved";
+
+                    case "REJECTED":
+                        return "status-rejected";
+
+                    case "RETURNED":
+                        return "status-returned";
+
+                    default:
+                        return "status-pending";
+
+                }
+
+            }
+
+
+            // =====================================
+            // 6. EXTRACT CLAIM DETAILS
+            // =====================================
+
+            function extractDetails(description) {
+
+                const details = {
+                    name: "Not provided",
+                    register: "Not provided",
+                    email: "Not provided",
+                    proof: "Not provided"
+                };
+
+                if (!description) {
+                    return details;
+                }
+
+                const lines = description.split("\n");
+
+                lines.forEach(function(line) {
+
+                    const separator = line.indexOf(":");
+
+                    if (separator === -1) {
+                        return;
+                    }
+
+                    const key = line
+                        .substring(0, separator)
+                        .trim()
+                        .toLowerCase();
+
+                    const value = line
+                        .substring(separator + 1)
+                        .trim();
+
+                    if (key === "claimant name") {
+
+                        details.name = value;
+
+                    } else if (key === "register number") {
+
+                        details.register = value;
+
+                    } else if (key === "email") {
+
+                        details.email = value;
+
+                    } else if (key === "ownership proof") {
+
+                        details.proof = value;
+
+                    }
+
+                });
+
+                return details;
+
+            }
+
+
+            // =====================================
+            // 7. UPDATE SUMMARY CARDS
+            // =====================================
+
+            function updateSummary(claims) {
+
+                document.getElementById("totalCount").textContent =
+                    claims.length;
+
+                document.getElementById("pendingCount").textContent =
+                    claims.filter(function(c) {
+                        return String(c.claim_status).toUpperCase()
+                            === "PENDING";
+                    }).length;
+
+                document.getElementById("approvedCount").textContent =
+                    claims.filter(function(c) {
+                        return String(c.claim_status).toUpperCase()
+                            === "APPROVED";
+                    }).length;
+
+                document.getElementById("returnedCount").textContent =
+                    claims.filter(function(c) {
+                        return String(c.claim_status).toUpperCase()
+                            === "RETURNED";
+                    }).length;
+
+            }
+
+
+            // =====================================
+            // 8. DISPLAY CLAIMS
+            // =====================================
+
+            function renderClaims() {
+
+                const selectedStatus = statusFilter.value;
+
+                updateSummary(allClaims);
+
+                tableBody.innerHTML = "";
+
+                const filteredClaims = allClaims.filter(
+                    function(claim) {
+
+                        const status =
+                            String(claim.claim_status || "PENDING")
+                                .toUpperCase();
+
+                        return selectedStatus === "ALL" ||
+                            status === selectedStatus;
+
+                    }
+                );
+
+
+                if (filteredClaims.length === 0) {
+
+                    emptyState.style.display = "block";
+
+                    document.getElementById("emptyTitle").textContent =
+                        allClaims.length === 0
+                            ? "No Claims Submitted Yet"
+                            : "No Claims Match This Filter";
+
+                    document.getElementById("emptyMessage").textContent =
+                        allClaims.length === 0
+                            ? "When you claim an item from Search Found Items, it will appear here."
+                            : "Try selecting another claim status.";
+
+                    return;
+
+                }
+
+                emptyState.style.display = "none";
+
+
+                filteredClaims.forEach(function(claim) {
+
+                    const row = document.createElement("tr");
+
+                    const details =
+                        extractDetails(claim.claim_description);
+
+
+                    // CLAIM REFERENCE
+
+                    const referenceCell = document.createElement("td");
+
+                    referenceCell.textContent =
+                        "CF-" + claim.claim_id;
+
+                    const referenceNote =
+                        document.createElement("div");
+
+                    referenceNote.className = "claim-id";
+
+                    referenceNote.textContent =
+                        "Claim ID: " + claim.claim_id;
+
+                    referenceCell.appendChild(referenceNote);
+
+                    row.appendChild(referenceCell);
+
+
+                    // ITEM NAME
+
+                    row.appendChild(
+                        createCell(claim.item_title)
+                    );
+
+
+                    // SUBMITTED DATE
+
+                    row.appendChild(
+                        createCell(formatDate(claim.claim_date))
+                    );
+
+
+                    // OWNERSHIP DETAILS
+
+                    const proofCell =
+                        document.createElement("td");
+
+                    proofCell.className = "proof-details";
+
+                    proofCell.style.whiteSpace = "pre-line";
+
+                    proofCell.textContent =
+                        "Name: " + details.name +
+                        "\nRegister: " + details.register +
+                        "\nEmail: " + details.email +
+                        "\nProof: " + details.proof;
+
+                    row.appendChild(proofCell);
+
+
+                    // STATUS
+
+                    const statusCell =
+                        document.createElement("td");
+
+                    const badge =
+                        document.createElement("span");
+
+                    const status =
+                        String(claim.claim_status || "PENDING")
+                            .toUpperCase();
+
+                    badge.className =
+                        "status " + getStatusClass(status);
+
+                    badge.textContent = status;
+
+                    statusCell.appendChild(badge);
+
+                    row.appendChild(statusCell);
+
+
+                    tableBody.appendChild(row);
+
+                });
+
+            }
+
+
+            // =====================================
+            // 9. LOAD CLAIMS FROM JAVA AND MYSQL
+            // =====================================
+
+            async function loadClaims() {
+
+                errorMessage.style.display = "none";
+
+                try {
+
+                    const response = await fetch(
+                        API_URL + "/claims"
+                    );
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Unable to retrieve claims from server."
+                        );
+
+                    }
+
+                    const claims = await response.json();
+
+                    if (!Array.isArray(claims)) {
+
+                        throw new Error(
+                            "Invalid claims data received."
+                        );
+
+                    }
+
+
+                    // FILTER USING ACTUAL LOGGED-IN STUDENT ID
+
+                    allClaims = claims.filter(function(claim) {
+
+                        return Number(claim.student_id) ===
+                            Number(student.student_id);
+
+                    });
+
+                    renderClaims();
+
+                } catch (error) {
+
+                    console.error(
+                        "Error loading claims:",
+                        error
+                    );
+
+                    errorMessage.textContent =
+                        "Unable to load claims. Make sure the Java server is running.";
+
+                    errorMessage.style.display = "block";
+
+                    allClaims = [];
+
+                    renderClaims();
+
+                }
+
+            }
+
+
+            // =====================================
+            // 10. FILTER EVENT
+            // =====================================
+
+            statusFilter.addEventListener(
+                "change",
+                renderClaims
+            );
+
+
+            // =====================================
+            // 11. LOAD CLAIMS WHEN PAGE OPENS
+            // =====================================
+
+            loadClaims();
+
+
+            // =====================================
+            // 12. REFRESH WHEN RETURNING TO PAGE
+            // =====================================
+
+            window.addEventListener(
+                "focus",
+                loadClaims
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>

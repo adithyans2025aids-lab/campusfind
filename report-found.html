@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusFind | Report Found Item</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #1e293b;
+            padding: 10px 16px;
+            border-radius: 7px;
+            text-decoration: none;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #047857;
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .notice {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #059669;
+            padding: 16px;
+            border-radius: 7px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin: 28px 0 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+        }
+
+        input[readonly] {
+            background: #f1f5f9;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 7px;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .photo-box {
+            border: 2px dashed #94a3b8;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .photo-box input {
+            border: none;
+            padding: 10px 0;
+        }
+
+        #photoPreview {
+            display: none;
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px auto 0;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .submit-button:hover {
+            background: #047857;
+        }
+
+        .submit-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 20px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            margin-top: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 22px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a href="dashboard.html" class="back-button">
+            ← Back to Dashboard
+        </a>
+
+        <h1>🎒 Report a Found Item</h1>
+
+        <p class="subtitle">
+            Found an item that belongs to someone else?
+            Report it with its details and photo so the rightful owner
+            can identify it and contact college staff.
+        </p>
+
+        <div class="notice">
+            <strong>Important:</strong>
+            This form is for reporting an item YOU FOUND.
+            Enter the correct date and location where you discovered it.
+        </div>
+
+        <form id="foundItemForm">
+
+            <h2>1. Found Item Details</h2>
+
+            <div class="form-group">
+                <label for="itemName">
+                    Item Name <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="itemName"
+                    name="itemName"
+                    placeholder="e.g. Black wallet, blue backpack"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="category">
+                    Item Category <span class="required">*</span>
+                </label>
+
+                <select id="category" name="category" required>
+                    <option value="">Select category</option>
+                    <option value="ID Card">ID Card</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Books and Notes">Books and Notes</option>
+                    <option value="Wallet">Wallet</option>
+                    <option value="Keys">Keys</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Water Bottle">Water Bottle</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">
+                    Item Description <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe its colour, brand, appearance, and identifying features."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="dateFound">
+                    Date Found <span class="required">*</span>
+                </label>
+
+                <input
+                    type="date"
+                    id="dateFound"
+                    name="dateFound"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="locationFound">
+                    Exact Location Where You Found It
+                    <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="locationFound"
+                    name="locationFound"
+                    placeholder="e.g. First floor, outside Room 204, near the library."
+                    required
+                ></textarea>
+            </div>
+
+            <h2>2. Upload Item Photo</h2>
+
+            <div class="form-group">
+                <label for="itemPhoto">
+                    Item Photo <span class="required">*</span>
+                </label>
+
+                <div class="photo-box">
+                    <p>📷 Select a clear photo of the found item.</p>
+
+                    <input
+                        type="file"
+                        id="itemPhoto"
+                        name="itemPhoto"
+                        accept="image/jpeg,image/png,image/webp"
+                        required
+                    >
+
+                    <span class="help-text">
+                        Accepted formats: JPG, PNG, WebP.
+                        Maximum file size: 5 MB.
+                    </span>
+
+                    <img
+                        id="photoPreview"
+                        alt="Selected item photo preview"
+                    >
+                </div>
+            </div>
+
+            <h2>3. Finder Information</h2>
+
+            <div class="form-group">
+                <label for="finderName">
+                    Your Full Name <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="finderName"
+                    name="finderName"
+                    placeholder="Your name will appear automatically"
+                    required
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="finderEmail">
+                    College Email <span class="required">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="finderEmail"
+                    name="finderEmail"
+                    placeholder="Your email will appear automatically"
+                    required
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="finderRegister">
+                    Register Number
+                </label>
+
+                <input
+                    type="text"
+                    id="finderRegister"
+                    name="finderRegister"
+                    placeholder="Your register number will appear automatically"
+                    readonly
+                >
+            </div>
+
+            <button type="submit" class="submit-button">
+                Submit Found Item Report
+            </button>
+
+            <button type="reset" class="reset-button">
+                Clear Form
+            </button>
+
+        </form>
+
+        <div
+            id="successMessage"
+            class="success-message"
+            role="status"
+        ></div>
+
+        <footer>
+            CampusFind © 2026 | College Lost and Found Management System
+        </footer>
+
+    </main>
+
+    <script>
+        const photoInput = document.getElementById("itemPhoto");
+        const photoPreview = document.getElementById("photoPreview");
+        const form = document.getElementById("foundItemForm");
+        const successMessage = document.getElementById("successMessage");
+        const dateInput = document.getElementById("dateFound");
+
+        const finderName = document.getElementById("finderName");
+        const finderEmail = document.getElementById("finderEmail");
+        const finderRegister = document.getElementById("finderRegister");
+
+        // Read the logged-in student from sessionStorage.
+        let student = null;
+
+        try {
+            const savedStudent = sessionStorage.getItem("campusFindStudent");
+
+            if (savedStudent) {
+                student = JSON.parse(savedStudent);
+            }
+        } catch (error) {
+            console.error("Invalid student session:", error);
+        }
+
+        // Redirect to login if there is no valid student session.
+        if (!student || !student.student_id) {
+            sessionStorage.removeItem("campusFindStudent");
+            alert("Please log in to report a found item.");
+            window.location.replace("student.html");
+        } else {
+            // Fill in the logged-in student's details.
+            fillStudentDetails();
+        }
+
+        function fillStudentDetails() {
+            if (!student) {
+                return;
+            }
+
+            finderName.value = student.name || "";
+            finderEmail.value = student.email || "";
+            finderRegister.value = student.register_number || "";
+        }
+
+        // Today's local date.
+        const now = new Date();
+
+        const todayString = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, "0"),
+            String(now.getDate()).padStart(2, "0")
+        ].join("-");
+
+        dateInput.max = todayString;
+
+        // Preview the selected photo.
+        photoInput.addEventListener("change", function () {
+            const file = this.files[0];
+
+            photoPreview.style.display = "none";
+            photoPreview.removeAttribute("src");
+
+            if (!file) {
+                return;
+            }
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert("Please select a JPG, PNG, or WebP image.");
+                this.value = "";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert("The image must be smaller than 5 MB.");
+                this.value = "";
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                photoPreview.src = event.target.result;
+                photoPreview.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Submit the report to the Java backend.
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!student || !student.student_id) {
+                alert("Your login session is missing. Please log in again.");
+                window.location.href = "student.html";
+                return;
+            }
+
+            if (!form.reportValidity()) {
+                return;
+            }
+
+            if (dateInput.value > todayString) {
+                alert("Date Found cannot be in the future.");
+                return;
+            }
+
+            const file = photoInput.files[0];
+
+            if (!file) {
+                alert("Please select a photo of the found item.");
+                return;
+            }
+
+            if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+                alert("Please select a JPG, PNG, or WebP image.");
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert("The image must be smaller than 5 MB.");
+                return;
+            }
+
+            const submitButton = form.querySelector(".submit-button");
+            const originalText = submitButton.textContent;
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Saving...";
+
+            const payload = {
+                title: document.getElementById("itemName").value.trim(),
+                description: document.getElementById("description").value.trim(),
+                category: document.getElementById("category").value,
+                location: document.getElementById("locationFound").value.trim(),
+                item_type: "FOUND",
+                reported_by: String(student.student_id)
+            };
+
+            try {
+                const response = await fetch(
+                    "http://localhost:8080/api/items",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(payload)
+                    }
+                );
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        "HTTP Error: " + response.status
+                    );
+                }
+
+                successMessage.innerHTML = "";
+
+                const heading = document.createElement("strong");
+                heading.textContent =
+                    "Found item successfully saved to MySQL!";
+
+                const reference = document.createElement("p");
+
+                const itemId =
+                    result.item_id ?? result.itemId ?? result.id;
+
+                reference.textContent = itemId !== undefined
+                    ? "Database Item ID: " + itemId
+                    : (result.message || "Item saved successfully.");
+
+                const note = document.createElement("p");
+                note.textContent =
+                    "Your found item report was saved successfully. " +
+                    "The photo is currently preview-only. " +
+                    "The selected date and finder details are not yet saved separately in MySQL.";
+
+                successMessage.appendChild(heading);
+                successMessage.appendChild(reference);
+                successMessage.appendChild(note);
+
+                form.reset();
+
+                // Reset clears the fields, so restore student details.
+                fillStudentDetails();
+
+                successMessage.style.display = "block";
+
+                successMessage.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            } catch (error) {
+                console.error("Unable to save item:", error);
+
+                alert(
+                    "Unable to save the item. Check that your Java server is running. " +
+                    error.message
+                );
+
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            }
+        });
+
+        // Clear the photo preview when resetting the form.
+        form.addEventListener("reset", function () {
+            setTimeout(function () {
+                photoPreview.style.display = "none";
+                photoPreview.removeAttribute("src");
+
+                fillStudentDetails();
+            }, 0);
+        });
+    </script>
+
+</body>
+</html>
