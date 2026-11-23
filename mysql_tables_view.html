@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Database Tables - CampusFind</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 30px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+        .header h1 {
+            margin: 0 0 8px 0;
+            font-size: 26px;
+        }
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .table-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .table-title h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #1e3a8a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .badge {
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background: #f8fafc;
+        }
+        .status-available {
+            background: #dcfce7;
+            color: #166534;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .status-returned {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .status-pending {
+            background: #fef9c3;
+            color: #854d0e;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .status-approved {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .type-lost {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .type-found {
+            color: #16a34a;
+            font-weight: bold;
+        }
+        .hint {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CampusFind - MySQL Database Tables</h1>
+            <p>Database: <strong>lost_and_found</strong> | Host: localhost:3306</p>
+        </div>
+
+        <!-- STUDENTS TABLE -->
+        <div class="card">
+            <div class="table-title">
+                <h2>📁 Table: students</h2>
+                <span class="badge">Records: 2</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>student_id</th>
+                        <th>name</th>
+                        <th>register_number</th>
+                        <th>email</th>
+                        <th>department</th>
+                        <th>study_year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Arun Kumar</td>
+                        <td>TEST001</td>
+                        <td>arun.test@example.com</td>
+                        <td>Computer Science</td>
+                        <td>3rd Year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Adithyan S</td>
+                        <td>25101009</td>
+                        <td>adithyan.s.2025.aids@rajalakshmi.edu.in</td>
+                        <td>Artificial Intelligence and Data Science</td>
+                        <td>2nd Year</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="hint">Stores registered student credentials and department details.</div>
+        </div>
+
+        <!-- ITEMS TABLE -->
+        <div class="card">
+            <div class="table-title">
+                <h2>📁 Table: items</h2>
+                <span class="badge">Records: 6</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>item_id</th>
+                        <th>title</th>
+                        <th>category</th>
+                        <th>location</th>
+                        <th>item_type</th>
+                        <th>reported_by</th>
+                        <th>report_date</th>
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Black Wallet</td>
+                        <td>Accessories</td>
+                        <td>College Library</td>
+                        <td><span class="type-found">FOUND</span></td>
+                        <td>Student #1</td>
+                        <td>2026-11-01</td>
+                        <td><span class="status-returned">RETURNED</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Blue Water Bottle</td>
+                        <td>Accessories</td>
+                        <td>College Library</td>
+                        <td><span class="type-found">FOUND</span></td>
+                        <td>Student #1</td>
+                        <td>2026-11-01</td>
+                        <td><span class="status-available">AVAILABLE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Test College Bag</td>
+                        <td>Bags</td>
+                        <td>College Classroom</td>
+                        <td><span class="type-found">FOUND</span></td>
+                        <td>Student #1</td>
+                        <td>2026-11-04</td>
+                        <td><span class="status-available">AVAILABLE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Blue College Bag</td>
+                        <td>Bags</td>
+                        <td>College Library</td>
+                        <td><span class="type-found">FOUND</span></td>
+                        <td>Student #1</td>
+                        <td>2026-11-04</td>
+                        <td><span class="status-returned">RETURNED</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Black Wallet</td>
+                        <td>Wallet</td>
+                        <td>Near Basketball Court</td>
+                        <td><span class="type-lost">LOST</span></td>
+                        <td>Student #1</td>
+                        <td>2026-11-04</td>
+                        <td><span class="status-available">AVAILABLE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Casio Watch DB-36</td>
+                        <td>Accessories</td>
+                        <td>HACB Block</td>
+                        <td><span class="type-lost">LOST</span></td>
+                        <td>Student #3 (Adithyan)</td>
+                        <td>2026-11-08</td>
+                        <td><span class="status-available">AVAILABLE</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="hint">Stores all reported Lost and Found items with real-time status.</div>
+        </div>
+
+        <!-- CLAIMS TABLE -->
+        <div class="card">
+            <div class="table-title">
+                <h2>📁 Table: claims</h2>
+                <span class="badge">Records: 4</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>claim_id</th>
+                        <th>item_id</th>
+                        <th>student_id</th>
+                        <th>claim_description / proof</th>
+                        <th>claim_status</th>
+                        <th>claim_date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Item #1</td>
+                        <td>Student #1</td>
+                        <td>Contains my student ID card and personal belongings.</td>
+                        <td><span class="status-pending">PENDING</span></td>
+                        <td>2026-11-01</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Item #4</td>
+                        <td>Student #1</td>
+                        <td>Claimant: Arun Kumar (TEST001), Ownership Proof submitted</td>
+                        <td><span class="status-approved">APPROVED</span></td>
+                        <td>2026-11-04</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Item #4</td>
+                        <td>Student #3</td>
+                        <td>Claimant: Adithyan S (25101009), ID Proof provided</td>
+                        <td><span class="status-pending">PENDING</span></td>
+                        <td>2026-11-08</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Item #4</td>
+                        <td>Student #3</td>
+                        <td>Handed over to student after staff verification</td>
+                        <td><span class="status-returned">RETURNED</span></td>
+                        <td>2026-11-08</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="hint">Tracks verification and claim handover workflow managed by college staff.</div>
+        </div>
+
+        <!-- STAFF TABLE -->
+        <div class="card">
+            <div class="table-title">
+                <h2>📁 Table: staff</h2>
+                <span class="badge">Records: 1</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>staff_id</th>
+                        <th>name</th>
+                        <th>email</th>
+                        <th>role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Campus Administrator</td>
+                        <td>admin@campusfind.com</td>
+                        <td><span class="status-approved">SYSTEM ADMIN</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="hint">Authorized college staff who verify ownership claims and manage inventory.</div>
+        </div>
+    </div>
+</body>
+</html>
