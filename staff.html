@@ -216,13 +216,10 @@
                     API + "/staff/login",
                     {
                         method: "POST",
-                        credentials: "include",
-
                         headers: {
                             "Content-Type": "application/json",
                             "bypass-tunnel-reminder": "true"
                         },
-
                         body: JSON.stringify({
                             email: email,
                             password: password
@@ -283,7 +280,11 @@
                 }
 
                 message.style.color = "#dc2626";
-                message.textContent = error.message;
+                if (error.message && (error.message.includes("Failed to fetch") || error.name === "TypeError")) {
+                    message.textContent = "Server is currently offline. Ensure Start_CampusFind.bat is running, or sign in with demo credentials.";
+                } else {
+                    message.textContent = error.message;
+                }
 
             } finally {
 
