@@ -655,7 +655,11 @@
 
                 try {
 
-                    const response = await fetch(API_URL);
+                    const response = await fetch(API_URL, {
+                        headers: {
+                            "bypass-tunnel-reminder": "true"
+                        }
+                    });
 
                     if (!response.ok) {
                         throw new Error(
@@ -703,21 +707,41 @@
                         error
                     );
 
-                    itemGrid.innerHTML = `
-                        <div class="empty-state">
-                            <div class="icon">⚠️</div>
-                            <h3>Unable to Load Items</h3>
-                            <p>
-                                Make sure your Java server is running
-                                at localhost:8080 and refresh the page.
-                            </p>
-                        </div>
-                    `;
+                    // Offline fallback — show demo items so the page is never blank
+                    allFoundItems = [
+                        {
+                            id: "demo-1",
+                            itemName: "Identity Card",
+                            description: "Student ID card found near the canteen",
+                            category: "ID / Cards",
+                            locationFound: "Canteen Area",
+                            dateFound: new Date().toISOString(),
+                            status: "AVAILABLE"
+                        },
+                        {
+                            id: "demo-2",
+                            itemName: "Water Bottle",
+                            description: "Blue water bottle found in Library",
+                            category: "Accessories",
+                            locationFound: "Library",
+                            dateFound: new Date().toISOString(),
+                            status: "AVAILABLE"
+                        },
+                        {
+                            id: "demo-3",
+                            itemName: "Notebook",
+                            description: "Engineering notebook found in Block A classroom",
+                            category: "Stationery",
+                            locationFound: "Block A - Room 302",
+                            dateFound: new Date().toISOString(),
+                            status: "AVAILABLE"
+                        }
+                    ];
 
                     resultCount.textContent =
-                        "Connection failed";
+                        "Showing demo items (server offline)";
 
-                    return null;
+                    return allFoundItems;
                 }
             }
 
