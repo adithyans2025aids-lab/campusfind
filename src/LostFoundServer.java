@@ -1177,7 +1177,7 @@ public class LostFoundServer {
 
         exchange.getResponseHeaders().set(
                 "Access-Control-Allow-Headers",
-                "Content-Type, Authorization");
+                "Content-Type, Authorization, bypass-tunnel-reminder, x-requested-with");
 
         if (exchange.getRequestMethod().equals("OPTIONS")) {
             send(exchange, 204, "");
@@ -1307,6 +1307,12 @@ public class LostFoundServer {
 
         exchange.getResponseHeaders().set(
                 "Access-Control-Allow-Origin", "*");
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Headers", "Content-Type, Authorization, bypass-tunnel-reminder, x-requested-with");
 
         exchange.getResponseHeaders().set(
                 "Cache-Control", "no-store");
