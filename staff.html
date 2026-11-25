@@ -189,6 +189,13 @@
         const message = document.getElementById("message");
         const loginButton = document.getElementById("loginButton");
 
+        function saveStaffSession(token, staff) {
+            sessionStorage.setItem("campusFindStaffToken", token);
+            sessionStorage.setItem("campusFindStaff", JSON.stringify(staff));
+            localStorage.setItem("campusFindStaffToken", token);
+            localStorage.setItem("campusFindStaff", JSON.stringify(staff));
+        }
+
         form.addEventListener("submit", async function(event) {
 
             event.preventDefault();
@@ -209,6 +216,7 @@
                     API + "/staff/login",
                     {
                         method: "POST",
+                        credentials: "include",
 
                         headers: {
                             "Content-Type": "application/json",
@@ -248,15 +256,7 @@
                     );
                 }
 
-                sessionStorage.setItem(
-                    "campusFindStaffToken",
-                    result.token
-                );
-
-                sessionStorage.setItem(
-                    "campusFindStaff",
-                    JSON.stringify(result.staff)
-                );
+                saveStaffSession(result.token, result.staff);
 
                 message.style.color = "#15803d";
                 message.textContent = "Login successful! Redirecting...";
@@ -270,13 +270,12 @@
                 if ((email.toLowerCase() === "admin@campusfind.com" || email.toLowerCase() === "admin") && (password === "admin123" || password === "admin")) {
                     message.style.color = "#15803d";
                     message.textContent = "Staff credentials verified (Offline/Local Session). Redirecting...";
-                    sessionStorage.setItem("campusFindStaffToken", "staff-token-" + Date.now());
-                    sessionStorage.setItem("campusFindStaff", JSON.stringify({
+                    saveStaffSession("staff-token-" + Date.now(), {
                         staff_id: 1,
                         name: "Campus Admin",
                         email: "admin@campusfind.com",
                         role: "admin"
-                    }));
+                    });
                     setTimeout(() => {
                         window.location.href = "staff-dashboard.html";
                     }, 500);

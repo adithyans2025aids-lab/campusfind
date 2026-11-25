@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -332,8 +331,8 @@
     <div class="notice">
         <strong>Database Connected:</strong>
         This dashboard retrieves items and claims from the MySQL
-        database through the Java backend. Staff authentication
-        must be implemented before real-world use.
+        database through the Java backend. Staff session token
+        is active for claim approvals and item handovers.
     </div>
 
     <!-- SUMMARY CARDS -->
@@ -470,6 +469,58 @@
 
     const API = "https://great-suns-kiss.loca.lt/api";
 
+    // VERIFY STAFF SESSION ON LOAD
+
+    function getStaffToken() {
+        return (
+            sessionStorage.getItem("campusFindStaffToken") ||
+            localStorage.getItem("campusFindStaffToken")
+        );
+    }
+
+    if (!getStaffToken()) {
+        window.location.replace("staff.html");
+    }
+
+    // BUILD AUTHENTICATED FETCH OPTIONS
+
+    function getAuthOptions(method = "GET", bodyData = null) {
+        const token = getStaffToken();
+
+        const headers = {
+            "bypass-tunnel-reminder": "true"
+        };
+
+        if (bodyData !== null) {
+            headers["Content-Type"] = "application/json";
+        }
+
+        if (token) {
+            headers["Authorization"] = "Bearer " + token;
+        }
+
+        const options = {
+            method: method,
+            credentials: "include",
+            headers: headers
+        };
+
+        if (bodyData !== null) {
+            options.body = JSON.stringify(bodyData);
+        }
+
+        return options;
+    }
+
+    function handleUnauthorized() {
+        sessionStorage.removeItem("campusFindStaffToken");
+        sessionStorage.removeItem("campusFindStaff");
+        localStorage.removeItem("campusFindStaffToken");
+        localStorage.removeItem("campusFindStaff");
+        alert("Staff session expired. Please log in again.");
+        window.location.href = "staff.html";
+    }
+
     // DATABASE DATA
 
     let allItems = [];
@@ -524,11 +575,16 @@
             const [itemsResponse, claimsResponse] =
                 await Promise.all([
 
-                    fetch(API + "/items", { headers: { "bypass-tunnel-reminder": "true" } }),
+                    fetch(API + "/items", getAuthOptions("GET")),
 
-                    fetch(API + "/claims", { headers: { "bypass-tunnel-reminder": "true" } })
+                    fetch(API + "/claims", getAuthOptions("GET"))
 
                 ]);
+
+            if (itemsResponse.status === 401 || claimsResponse.status === 401) {
+                handleUnauthorized();
+                return;
+            }
 
             if (!itemsResponse.ok || !claimsResponse.ok) {
 
@@ -860,23 +916,16 @@
 
             const response = await fetch(
                 API + "/claims/status",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                        "bypass-tunnel-reminder": "true"
-                    },
-
-                    body: JSON.stringify({
-
-                        claim_id: claimId,
-
-                        status: newStatus
-
-                    })
-                }
+                getAuthOptions("POST", {
+                    claim_id: claimId,
+                    status: newStatus
+                })
             );
+
+            if (response.status === 401) {
+                handleUnauthorized();
+                return;
+            }
 
             const result = await response.json();
 
@@ -920,21 +969,15 @@
 
             const response = await fetch(
                 API + "/claims/handover",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                        "bypass-tunnel-reminder": "true"
-                    },
-
-                    body: JSON.stringify({
-
-                        claim_id: claimId
-
-                    })
-                }
+                getAuthOptions("POST", {
+                    claim_id: claimId
+                })
             );
+
+            if (response.status === 401) {
+                handleUnauthorized();
+                return;
+            }
 
             const result = await response.json();
 
@@ -977,6 +1020,11 @@
 
         if (confirm("Return to the staff login page?")) {
 
+            sessionStorage.removeItem("campusFindStaffToken");
+            sessionStorage.removeItem("campusFindStaff");
+            localStorage.removeItem("campusFindStaffToken");
+            localStorage.removeItem("campusFindStaff");
+
             window.location.href = "staff.html";
         }
     }
@@ -1008,4 +1056,3 @@
 
 </body>
 </html>
-
