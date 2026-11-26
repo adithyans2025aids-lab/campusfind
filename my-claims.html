@@ -731,6 +731,22 @@
             // 9. LOAD CLAIMS FROM JAVA AND MYSQL
             // =====================================
 
+            const DEMO_CLAIMS = [
+                {
+                    claim_id: "DEMO-1",
+                    item_id: 1,
+                    student_id: student ? student.student_id : 0,
+                    item_title: "Scientific Calculator (Casio fx-991EX)",
+                    claim_status: "PENDING",
+                    claim_date: new Date().toISOString(),
+                    claim_description:
+                        "Claimant Name: " + (student ? student.name : "You") +
+                        "\nRegister Number: " + (student ? (student.register_number || "N/A") : "N/A") +
+                        "\nEmail: " + (student ? (student.email || "N/A") : "N/A") +
+                        "\nOwnership Proof: Has a black sticker on the back cover with REC logo."
+                }
+            ];
+
             async function loadClaims() {
 
                 errorMessage.style.display = "none";
@@ -738,35 +754,32 @@
                 try {
 
                     const response = await fetch(
-                        API_URL + "/claims"
+                        API_URL + "/claims",
+                        {
+                            headers: {
+                                "bypass-tunnel-reminder": "true"
+                            }
+                        }
                     );
 
                     if (!response.ok) {
-
                         throw new Error(
                             "Unable to retrieve claims from server."
                         );
-
                     }
 
                     const claims = await response.json();
 
                     if (!Array.isArray(claims)) {
-
                         throw new Error(
                             "Invalid claims data received."
                         );
-
                     }
 
-
                     // FILTER USING ACTUAL LOGGED-IN STUDENT ID
-
                     allClaims = claims.filter(function(claim) {
-
                         return Number(claim.student_id) ===
                             Number(student.student_id);
-
                     });
 
                     renderClaims();
@@ -778,13 +791,17 @@
                         error
                     );
 
+                    // Offline fallback — show demo data with a soft notice
                     errorMessage.textContent =
-                        "Unable to load claims. Make sure the Java server is running.";
-
+                        "⚠️ Server offline or unreachable. Showing demo data. Start Start_CampusFind.bat to load live claims.";
                     errorMessage.style.display = "block";
+                    errorMessage.style.background = "#fff8e1";
+                    errorMessage.style.color = "#b45309";
+                    errorMessage.style.border = "1px solid #fcd34d";
+                    errorMessage.style.borderRadius = "8px";
+                    errorMessage.style.padding = "12px 16px";
 
-                    allClaims = [];
-
+                    allClaims = DEMO_CLAIMS;
                     renderClaims();
 
                 }

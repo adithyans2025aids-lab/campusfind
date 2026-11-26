@@ -354,7 +354,11 @@
         errorMessage.style.display = "none";
 
         try {
-            const response = await fetch(API_URL + "/claims");
+            const response = await fetch(API_URL + "/claims", {
+                headers: {
+                    "bypass-tunnel-reminder": "true"
+                }
+            });
 
             if (!response.ok) {
                 throw new Error("Unable to retrieve claims.");
@@ -403,12 +407,25 @@
         } catch (error) {
             console.error("Notification error:", error);
 
+            // Offline fallback with demo notification
             notificationList.innerHTML = "";
+            const demoItems = [
+                { claim_id: "DEMO-1", item_title: "Scientific Calculator (Casio fx-991EX)", claim_status: "PENDING", claim_date: new Date().toISOString(), student_id: STUDENT_ID },
+                { claim_id: "DEMO-2", item_title: "College Smart ID Card (CSE Dept)", claim_status: "APPROVED", claim_date: new Date(Date.now() - 86400000).toISOString(), student_id: STUDENT_ID }
+            ];
+            let html = "";
+            demoItems.forEach(function(c) { html += createNotification(c); });
+            notificationList.innerHTML = html;
 
             errorMessage.textContent =
-                "Unable to load notifications. Please make sure your Java server is running.";
-
+                "⚠️ Server offline. Showing demo notifications. Run Start_CampusFind.bat to load live data.";
             errorMessage.style.display = "block";
+            errorMessage.style.background = "#fff8e1";
+            errorMessage.style.color = "#b45309";
+            errorMessage.style.border = "1px solid #fcd34d";
+            errorMessage.style.borderRadius = "8px";
+            errorMessage.style.padding = "12px 16px";
+            errorMessage.style.marginBottom = "16px";
         }
     }
 
